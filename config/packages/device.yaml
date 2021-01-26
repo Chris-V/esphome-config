@@ -1,0 +1,42 @@
+esphome:
+  name: "${node_name}"
+  build_path: "../build/${node_name}"
+
+logger:
+  level: "${log_level}"
+
+api:
+  password: !secret "api_key"
+  port: 6053
+  reboot_timeout: "30min"
+
+ota:
+  password: !secret "ota_password"
+  safe_mode: true
+
+wifi:
+  ssid: !secret "wifi_ssid"
+  password: !secret "wifi_password"
+  fast_connect: true
+
+binary_sensor:
+  - platform: "status"
+    name: "${display_name} status"
+
+sensor:
+  - platform: "uptime"
+    name: "${display_name} uptime"
+    unit_of_measurement: "h"
+    filters:
+      - lambda: "return int((x + 1800.0) / 3600.0);"
+  - platform: "wifi_signal"
+    name: "${display_name} WiFi signal"
+    update_interval: "5min"
+
+text_sensor:
+  - platform: "version"
+    name: "${display_name} ESPHome version"
+
+switch:
+  - platform: "restart"
+    name: "${display_name} restart"

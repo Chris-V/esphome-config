@@ -1,0 +1,43 @@
+name: "CI"
+
+"on": ["push"]
+
+jobs:
+  check:
+    name: "Static check"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: "Lint"
+        run: "make lint"
+
+  validate:
+    name: "Validate"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      # Setup tooling
+      - name: "Cache asdf plugins"
+        uses: "actions/cache@v2"
+        with:
+          key: "${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}"
+          restore-keys: "${{ runner.os }}-asdf-"
+          path: |
+            ${ASDF_DIR}/installs
+            ${ASDF_DIR}/plugins
+
+      - name: "Install asdf plugins"
+        uses: "asdf-vm/actions/install@v1"
+
+      - name: "Install python dependencies"
+        run: "python -m pip install -r requirements.txt"
+
+      # Compile
+      - name: "Copy blank secrets"
+        run: "cp config/secrets.blank.yaml config/secrets.yaml"
+
+      - name: "Compile"
+        run: "python -m esphome config/slinky_terrarium.yaml compile"

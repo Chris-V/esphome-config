@@ -1,0 +1,12 @@
+substitutions:
+  node_name: "slinky_terrarium"
+  display_name: "Slinky terrarium"
+  log_level: "DEBUG"
+
+esphome:
+  platform: "ESP8266"
+  board: "nodemcuv2"
+
+packages:
+  device: !include "packages/device.yaml"
+  terrarium: !include "packages/terrarium.yaml"

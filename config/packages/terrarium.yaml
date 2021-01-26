@@ -1,0 +1,19 @@
+i2c:
+  - sda: "D2"
+    scl: "D1"
+    scan: true
+
+dallas:
+  - pin: "D5"
+
+sensor:
+  - platform: "am2320"
+    update_interval: "60s"
+    humidity:
+      name: "${display_name} humidity"
+    temperature:
+      name: "${display_name} temperature"
+  - platform: "dallas"
+    name: "${display_name} basking temperature"
+    address: 0x1c0000031edd2a28
+    resolution: 12
