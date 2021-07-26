@@ -1,0 +1,30 @@
+external_components:
+  - source: "github://geoffdavis/esphome-mitsubishiheatpump@2.2.0"
+    components:
+      - "mitsubishi_heatpump"
+
+climate:
+  - platform: "mitsubishi_heatpump"
+    id: "heat_pump"
+    name: "${display_name}"
+    hardware_uart: "${uart_id}"
+    supports:
+      mode: ["HEAT_COOL", "COOL", "HEAT", "DRY", "FAN_ONLY"]
+      fan_mode: ["AUTO", "DIFFUSE", "LOW", "MEDIUM", "MIDDLE", "HIGH"]
+      swing_mode: ["OFF", "VERTICAL"]
+    visual:
+      min_temperature: 16
+      max_temperature: 31
+      temperature_step: 1.0
+
+api:
+  services:
+    - service: "set_remote_temperature"
+      variables:
+        temperature: "float"
+      then:
+        - lambda: "id(heat_pump).set_remote_temperature(temperature);"
+
+    - service: "use_internal_temperature"
+      then:
+        - lambda: "id(heat_pump).set_remote_temperature(0);"

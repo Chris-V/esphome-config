@@ -1,0 +1,17 @@
+substitutions:
+  node_name: "ground_floor_heat_pump"
+  display_name: "Heat pump"
+  log_level: "DEBUG"
+
+  uart_id: "UART0"
+
+esphome:
+  platform: "ESP8266"
+  board: "d1_mini"
+
+logger:
+  baud_rate: 0
+
+packages:
+  device: !include "../packages/base_device.yaml"
+  terrarium: !include "../packages/mitsubishi_heatpump_mszfe12na8.yaml"

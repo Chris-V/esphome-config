@@ -37,7 +37,9 @@ jobs:
 
       # Compile
       - name: "Copy blank secrets"
-        run: "cp config/secrets.blank.yaml config/secrets.yaml"
+        run: "cp config/devices/.secrets.blank.yaml config/devices/secrets.yaml"
 
       - name: "Compile"
-        run: "python -m esphome config/slinky_terrarium.yaml compile"
+        run: |
+          shopt -s extglob
+          python -m esphome compile config/devices/!(secrets).yaml

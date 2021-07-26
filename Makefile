@@ -6,7 +6,7 @@ CURRENT_DIR       = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 FILE_LINT_VERSION = 0.4
 YAML_LINT_VERSION = 1.25
-LINT_IGNORE_PATHS = .git,.venv,build,config/.esphome
+LINT_IGNORE_PATHS = .git,.venv,build,config/devices/.esphome
 
 .PHONY: setup
 setup:
@@ -14,6 +14,15 @@ setup:
 	asdf install
 	python -m venv .venv
 	. .venv/bin/activate && python -m pip install -r requirements.txt
+
+.PHONY: open_dashboard
+open_dashboard:
+	. .venv/bin/activate && python -m esphome dashboard config/devices
+
+.PHONY: compile
+compile: SHELL:=/bin/bash
+compile:
+	. .venv/bin/activate && shopt -s extglob && python -m esphome compile $$(echo config/devices/!(secrets).yaml)
 
 .PHONY: lint
 lint: _lint-files _lint-yaml

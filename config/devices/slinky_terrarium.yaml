@@ -3,10 +3,12 @@ substitutions:
   display_name: "Slinky terrarium"
   log_level: "DEBUG"
 
+  basking_temperature_address: "0x8902139246563B28"
+
 esphome:
   platform: "ESP8266"
   board: "nodemcuv2"
 
 packages:
-  device: !include "packages/device.yaml"
-  terrarium: !include "packages/terrarium.yaml"
+  device: !include "../packages/base_device.yaml"
+  terrarium: !include "../packages/terrarium.yaml"
