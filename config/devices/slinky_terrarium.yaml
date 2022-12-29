@@ -1,14 +1,28 @@
 substitutions:
-  node_name: "slinky_terrarium"
   display_name: "Slinky terrarium"
-  log_level: "DEBUG"
-
-  basking_temperature_address: "0x8902139246563B28"
+  node_name: "slinky_terrarium"
 
 esphome:
-  platform: "ESP8266"
   board: "nodemcuv2"
+  platform: "ESP8266"
 
 packages:
-  device: !include "../packages/base_device.yaml"
-  terrarium: !include "../packages/terrarium.yaml"
+  base_device: !include
+    file: "../packages/common/base_device.yaml"
+    vars:
+      log_level: "DEBUG"
+      api_key: !secret "api_key"
+      api_encryption_key: !secret "api_encryption_key"
+      ota_password: !secret "ota_password"
+
+  wifi: !include
+    file: "../packages/common/wifi.yaml"
+    vars:
+      wifi_ssid: !secret "wifi_ssid"
+      wifi_password: !secret "wifi_password"
+      wifi_fallback_hotspot_password: !secret "wifi_fallback_hotspot_password"
+
+  terrarium: !include
+    file: "../packages/terrarium/main.yaml"
+    vars:
+      basking_temperature_address: "0x8902139246563B28"
