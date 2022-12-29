@@ -2,11 +2,18 @@ ifneq (,)
 .error This Makefile requires GNU Make.
 endif
 
-CURRENT_DIR       = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+CURRENT_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+DEVICES_DIR = $(abspath $(CURRENT_DIR)/config/devices)
+
+DEVICE = device-name
+DEVICE_DIR = $(abspath $(DEVICES_DIR)/$(DEVICE))
+DEVICE_MAIN = $(abspath $(DEVICE_DIR)/main.yaml)
+
+ESPHOME = . .venv/bin/activate && python -m esphome
 
 FILE_LINT_VERSION = 0.4
 YAML_LINT_VERSION = 1.25
-LINT_IGNORE_PATHS = .git,.venv,build,config/devices/.esphome
+LINT_IGNORE_PATHS = .git,.venv,build,**/.esphome
 
 .PHONY: setup
 setup:
@@ -16,13 +23,23 @@ setup:
 	. .venv/bin/activate && python -m pip install -r requirements.txt
 
 .PHONY: open_dashboard
-open_dashboard:
-	. .venv/bin/activate && python -m esphome dashboard config/devices
+open_dashboard: $(DEVICE_DIR)
+	$(ESPHOME) dashboard $(DEVICE_DIR)
 
-.PHONY: compile
-compile: SHELL:=/bin/bash
-compile:
-	. .venv/bin/activate && shopt -s extglob && python -m esphome compile $$(echo config/devices/!(secrets).yaml)
+list-devices: $(DEVICES_DIR)/*
+	@echo $^
+
+validate: $(DEVICE_MAIN)
+	$(ESPHOME) config $(DEVICE_MAIN)
+
+validate-all: $(DEVICES_DIR)/*/main.yaml
+	$(ESPHOME) config $^
+
+compile: $(DEVICE_MAIN)
+	$(ESPHOME) compile $(DEVICE_MAIN)
+
+compile-all: $(DEVICES_DIR)/*/main.yaml
+	$(ESPHOME) compile $^
 
 .PHONY: lint
 lint: _lint-files _lint-yaml

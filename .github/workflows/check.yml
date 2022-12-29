@@ -28,9 +28,12 @@ jobs:
         run: "pip install -r requirements.txt"
 
       - name: "Copy blank secrets"
-        run: "cp config/devices/.secrets.blank.yaml config/devices/secrets.yaml"
+        run: |
+          for f in ./config/devices/*; do
+            [ -d "$f" ] && cp "$f/.secrets.blank.yaml" "$f/secrets.yaml"
+          done
 
       - name: "Compile"
         run: |
           shopt -s extglob
-          esphome compile config/devices/!(secrets).yaml
+          esphome compile config/devices/**/main.yaml
