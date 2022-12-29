@@ -6,14 +6,14 @@ logger:
   level: "${log_level}"
 
 api:
-  password: !secret "api_key"
+  password: "${api_key}"
   port: 6053  # Default
   reboot_timeout: "30min"
   encryption:
-    key: !secret "api_encryption_key"
+    key: "${api_encryption_key}"
 
 ota:
-  password: !secret "ota_password"
+  password: "${ota_password}"
   safe_mode: true
 
 binary_sensor:

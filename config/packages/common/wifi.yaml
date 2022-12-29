@@ -1,9 +1,9 @@
 captive_portal: {}
 
 wifi:
-  ssid: !secret "wifi_ssid"
-  password: !secret "wifi_password"
+  ssid: "${wifi_ssid}"
+  password: "${wifi_password}"
   fast_connect: true
   ap:
     ssid: "${node_name} Fallback"
-    password: !secret "fallback_hotspot_password"
+    password: "${wifi_fallback_hotspot_password}"
