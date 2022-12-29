@@ -8,7 +8,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
       - name: "Lint"
         run: "make lint"
 
@@ -17,29 +17,20 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
-      # Setup tooling
-      - name: "Cache asdf plugins"
-        uses: "actions/cache@v2"
+      - uses: "actions/setup-python@v4"
         with:
-          key: "${{ runner.os }}-asdf-${{ hashFiles('.tool-versions') }}"
-          restore-keys: "${{ runner.os }}-asdf-"
-          path: |
-            ${ASDF_DIR}/installs
-            ${ASDF_DIR}/plugins
-
-      - name: "Install asdf plugins"
-        uses: "asdf-vm/actions/install@v1"
+          python-version: "3.11.1"
+          cache: "pip"
 
       - name: "Install python dependencies"
-        run: "python -m pip install -r requirements.txt"
+        run: "pip install -r requirements.txt"
 
-      # Compile
       - name: "Copy blank secrets"
         run: "cp config/devices/.secrets.blank.yaml config/devices/secrets.yaml"
 
       - name: "Compile"
         run: |
           shopt -s extglob
-          python -m esphome compile config/devices/!(secrets).yaml
+          esphome compile config/devices/!(secrets).yaml
