@@ -10,5 +10,6 @@ esphome:
   board: "nodemcuv2"
 
 packages:
-  device: !include "../packages/base_device.yaml"
-  terrarium: !include "../packages/terrarium.yaml"
+  base_device: !include "../packages/common/base_device.yaml"
+  wifi: !include "../packages/common/wifi.yaml"
+  terrarium: !include "../packages/terrarium/main.yaml"

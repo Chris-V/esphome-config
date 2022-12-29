@@ -9,20 +9,12 @@ api:
   password: !secret "api_key"
   port: 6053  # Default
   reboot_timeout: "30min"
-
-captive_portal: {}
+  encryption:
+    key: !secret "api_encryption_key"
 
 ota:
   password: !secret "ota_password"
   safe_mode: true
-
-wifi:
-  ssid: !secret "wifi_ssid"
-  password: !secret "wifi_password"
-  fast_connect: true
-  ap:
-    ssid: "${node_name} Fallback"
-    password: !secret "fallback_hotspot_password"
 
 binary_sensor:
   - platform: "status"
@@ -50,11 +42,11 @@ text_sensor:
     bssid:
       name: "${display_name} BSSID"
 
-switch:
+button:
   - platform: "restart"
-    name: "${display_name} restart"
+    name: "Restart ${display_name}"
 
 # Sync time with Home Assistant.
-# time:
-#   - platform: "homeassistant"
-#     id: "homeassistant_time"
+time:
+  - platform: "homeassistant"
+    id: "homeassistant_time"

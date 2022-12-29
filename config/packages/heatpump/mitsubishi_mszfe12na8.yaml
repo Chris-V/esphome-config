@@ -1,5 +1,5 @@
 external_components:
-  - source: "github://geoffdavis/esphome-mitsubishiheatpump@2.2.0"
+  - source: "github://geoffdavis/esphome-mitsubishiheatpump@2.4.1"
     components:
       - "mitsubishi_heatpump"
 

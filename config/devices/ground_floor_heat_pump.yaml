@@ -13,5 +13,6 @@ logger:
   baud_rate: 0
 
 packages:
-  device: !include "../packages/base_device.yaml"
-  terrarium: !include "../packages/mitsubishi_heatpump_mszfe12na8.yaml"
+  base_device: !include "../packages/common/base_device.yaml"
+  wifi: !include "../packages/common/wifi.yaml"
+  heatpump: !include "../packages/heatpump/mitsubishi_mszfe12na8.yaml"
