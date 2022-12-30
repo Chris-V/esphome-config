@@ -1,0 +1,21 @@
+substitutions:
+  display_name: "Kitchen proxy"
+  node_name: "proxy-kitchen"
+
+esp32:
+  board: "esp32-poe-iso"
+  framework:
+    type: "esp-idf"
+
+packages:
+  base_device: !include
+    file: "../../packages/common/base_device.yaml"
+    vars:
+      log_level: "DEBUG"
+      api_key: !secret "api_key"
+      api_encryption_key: !secret "api_encryption_key"
+      ota_password: !secret "ota_password"
+
+  ethernet: !include "../../packages/common/ethernet_olimex_esp32_poe_iso.yaml"
+
+  bluetooth_proxy: !include "../../packages/bluetooth_proxy/esp32.yaml"

@@ -2,9 +2,8 @@ substitutions:
   display_name: "Slinky terrarium"
   node_name: "slinky_terrarium"
 
-esphome:
+esp8266:
   board: "nodemcuv2"
-  platform: "ESP8266"
 
 packages:
   base_device: !include

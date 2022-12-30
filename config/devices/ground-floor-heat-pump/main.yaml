@@ -2,9 +2,8 @@ substitutions:
   display_name: "Heat pump"
   node_name: "ground_floor_heat_pump"
 
-esphome:
+esp8266:
   board: "d1_mini"
-  platform: "ESP8266"
 
 logger:
   baud_rate: 0
