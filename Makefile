@@ -22,9 +22,9 @@ setup:
 	python -m venv .venv
 	. .venv/bin/activate && python -m pip install -r requirements.txt
 
-.PHONY: open_dashboard
-open_dashboard: $(DEVICE_DIR)
-	$(ESPHOME) dashboard $(DEVICE_DIR)
+.PHONY: dashboard
+dashboard:
+	$(ESPHOME) dashboard ./dashboard
 
 list-devices: $(DEVICES_DIR)/*
 	@echo $^

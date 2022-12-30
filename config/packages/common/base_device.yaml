@@ -1,7 +1,10 @@
+substitutions:
+  root_path: "../../.."
+
 esphome:
   name: "${node_name}"
   name_add_mac_suffix: false
-  build_path: "../../../build/${node_name}"
+  build_path: "${root_path}/build/${node_name}"
 
 logger:
   level: "${log_level}"

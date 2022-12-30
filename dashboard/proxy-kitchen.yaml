@@ -1,0 +1,4 @@
+<<: !include
+  file: "../config/devices/proxy-kitchen/main.yaml"
+  vars:
+    root_path: ".."
