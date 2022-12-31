@@ -1,0 +1,4 @@
+<<: !include
+  file: "../config/devices/proxy-lounge/main.yaml"
+  vars:
+    root_path: ".."
