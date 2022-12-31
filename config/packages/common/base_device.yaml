@@ -1,4 +1,5 @@
 substitutions:
+  log_level: "DEBUG"
   root_path: "../../.."
 
 esphome:
@@ -20,17 +21,33 @@ ota:
   password: "${ota_password}"
   safe_mode: true
 
+time:
+  - platform: "homeassistant"
+    id: "current_time"
+    on_time_sync:
+      - component.update: "uptime_timestamp"
+
 binary_sensor:
   - platform: "status"
     name: "${display_name} status"
 
 sensor:
   - platform: "uptime"
+    id: "uptime_seconds"
+    internal: true
+
+  - platform: "template"
+    id: "uptime_timestamp"
     name: "${display_name} uptime"
-    update_interval: "30min"
-    unit_of_measurement: "h"
-    filters:
-      - lambda: "return int((x + 1800.0) / 3600.0);"
+    device_class: "timestamp"
+    entity_category: "diagnostic"
+    accuracy_decimals: 0
+    update_interval: "never"
+    lambda: |-
+      static float timestamp = (
+        id(current_time).utcnow().timestamp - id(uptime_seconds).state
+      );
+      return timestamp;
 
 text_sensor:
   - platform: "version"
@@ -43,7 +60,3 @@ button:
   - platform: "safe_mode"
     name: "Restart ${display_name} (safe mode)"
     entity_category: "diagnostic"
-
-time:
-  - platform: "homeassistant"
-    id: "homeassistant_time"

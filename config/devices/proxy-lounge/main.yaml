@@ -1,6 +1,6 @@
 substitutions:
-  display_name: "Office proxy"
-  node_name: "proxy-office"
+  display_name: "Lounge proxy"
+  node_name: "proxy-lounge"
 
 esp32:
   board: "esp32-poe-iso"
