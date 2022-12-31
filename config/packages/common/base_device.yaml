@@ -1,6 +1,10 @@
+substitutions:
+  root_path: "../../.."
+
 esphome:
   name: "${node_name}"
-  build_path: "../../build/${node_name}"
+  name_add_mac_suffix: false
+  build_path: "${root_path}/build/${node_name}"
 
 logger:
   level: "${log_level}"
@@ -27,26 +31,19 @@ sensor:
     unit_of_measurement: "h"
     filters:
       - lambda: "return int((x + 1800.0) / 3600.0);"
-  - platform: "wifi_signal"
-    name: "${display_name} WiFi signal"
-    update_interval: "5min"
 
 text_sensor:
   - platform: "version"
     name: "${display_name} ESPHome version"
-  - platform: "wifi_info"
-    ip_address:
-      name: "${display_name} IP"
-    ssid:
-      name: "${display_name} SSID"
-    bssid:
-      name: "${display_name} BSSID"
 
 button:
   - platform: "restart"
     name: "Restart ${display_name}"
+    entity_category: "diagnostic"
+  - platform: "safe_mode"
+    name: "Restart ${display_name} (safe mode)"
+    entity_category: "diagnostic"
 
-# Sync time with Home Assistant.
 time:
   - platform: "homeassistant"
     id: "homeassistant_time"

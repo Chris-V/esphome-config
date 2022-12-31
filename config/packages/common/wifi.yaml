@@ -7,3 +7,19 @@ wifi:
   ap:
     ssid: "${node_name} Fallback"
     password: "${wifi_fallback_hotspot_password}"
+
+sensor:
+  - platform: "wifi_signal"
+    name: "${display_name} WiFi signal"
+    update_interval: "5min"
+
+text_sensor:
+  - platform: "version"
+    name: "${display_name} ESPHome version"
+  - platform: "wifi_info"
+    ip_address:
+      name: "${display_name} IP"
+    ssid:
+      name: "${display_name} SSID"
+    bssid:
+      name: "${display_name} BSSID"
