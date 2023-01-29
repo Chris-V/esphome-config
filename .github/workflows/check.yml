@@ -1,4 +1,4 @@
-name: "CI"
+name: "Validate"
 
 "on": ["push"]
 
@@ -12,14 +12,17 @@ jobs:
       - name: "Lint"
         run: "make lint"
 
-  validate:
-    name: "Validate"
+  prepare:
+    name: "Prepare environment"
     runs-on: "ubuntu-latest"
+    outputs:
+      devices: "${{ steps.list-devices.outputs.devices }}"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
 
       - uses: "actions/setup-python@v4"
+        id: "setup-python"
         with:
           python-version: "3.11.1"
           cache: "pip"
@@ -27,13 +30,36 @@ jobs:
       - name: "Install python dependencies"
         run: "pip install -r requirements.txt"
 
-      - name: "Copy blank secrets"
+      - name: "List devices"
+        id: "list-devices"
         run: |
-          for f in ./config/devices/*; do
-            [ -d "$f" ] && cp "$f/.secrets.blank.yaml" "$f/secrets.yaml"
-          done
+          devices_json=$(ls ./config/devices/ | jq -R -s -c 'split("\n")[:-1]')
+          echo "devices=$devices_json" >> $GITHUB_OUTPUT
+
+  compile:
+    name: "Compile ${{ matrix.device }}"
+    runs-on: "ubuntu-latest"
+    needs: "prepare"
+    strategy:
+      fail-fast: true
+      matrix:
+        device: "${{ fromJSON(needs.prepare.outputs.devices) }}"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - uses: "actions/setup-python@v4"
+        id: "setup-python"
+        with:
+          python-version: "3.11.1"
+          cache: "pip"
+
+      - name: "Install python dependencies"
+        run: "pip install -r requirements.txt"
 
       - name: "Compile"
         run: |
-          shopt -s extglob
-          esphome compile config/devices/**/main.yaml
+          device_path=$(realpath "./config/devices/${{ matrix.device }}")
+
+          cp -f "$device_path/.secrets.blank.yaml" "$device_path/secrets.yaml"
+          python -m esphome compile "$device_path/main.yaml"
