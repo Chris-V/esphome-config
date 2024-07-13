@@ -1,6 +1,6 @@
 substitutions:
   display_name: "Slinky terrarium"
-  node_name: "slinky_terrarium"
+  node_name: "slinky-terrarium"
 
 esp8266:
   board: "nodemcuv2"
@@ -10,7 +10,6 @@ packages:
     file: "../../packages/common/base_device.yaml"
     vars:
       log_level: "DEBUG"
-      api_key: !secret "api_key"
       api_encryption_key: !secret "api_encryption_key"
       ota_password: !secret "ota_password"
 

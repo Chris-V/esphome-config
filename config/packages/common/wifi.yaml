@@ -10,16 +10,14 @@ wifi:
 
 sensor:
   - platform: "wifi_signal"
-    name: "${display_name} WiFi signal"
+    name: "WiFi signal"
     update_interval: "5min"
 
 text_sensor:
-  - platform: "version"
-    name: "${display_name} ESPHome version"
   - platform: "wifi_info"
     ip_address:
-      name: "${display_name} IP"
+      name: "IP"
     ssid:
-      name: "${display_name} SSID"
+      name: "SSID"
     bssid:
-      name: "${display_name} BSSID"
+      name: "BSSID"

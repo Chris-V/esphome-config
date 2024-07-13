@@ -4,6 +4,7 @@ substitutions:
 
 esphome:
   name: "${node_name}"
+  friendly_name: "${display_name}"
   name_add_mac_suffix: false
   build_path: "${root_path}/build/${node_name}"
 
@@ -11,15 +12,17 @@ logger:
   level: "${log_level}"
 
 api:
-  password: "${api_key}"
   port: 6053  # Default
   reboot_timeout: "30min"
   encryption:
     key: "${api_encryption_key}"
 
 ota:
+  platform: "esphome"
   password: "${ota_password}"
-  safe_mode: true
+
+safe_mode:
+  disabled: false
 
 time:
   - platform: "homeassistant"
@@ -29,7 +32,7 @@ time:
 
 binary_sensor:
   - platform: "status"
-    name: "${display_name} status"
+    name: "Status"
 
 sensor:
   - platform: "uptime"
@@ -38,7 +41,7 @@ sensor:
 
   - platform: "template"
     id: "uptime_timestamp"
-    name: "${display_name} uptime"
+    name: "Uptime"
     device_class: "timestamp"
     entity_category: "diagnostic"
     accuracy_decimals: 0
@@ -51,12 +54,12 @@ sensor:
 
 text_sensor:
   - platform: "version"
-    name: "${display_name} ESPHome version"
+    name: "ESPHome version"
 
 button:
   - platform: "restart"
-    name: "Restart ${display_name}"
+    name: "Restart"
     entity_category: "diagnostic"
   - platform: "safe_mode"
-    name: "Restart ${display_name} (safe mode)"
+    name: "Restart (safe mode)"
     entity_category: "diagnostic"
