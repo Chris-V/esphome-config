@@ -1,5 +1,5 @@
 external_components:
-  - source: "github://geoffdavis/esphome-mitsubishiheatpump@2.4.1"
+  - source: "github://geoffdavis/esphome-mitsubishiheatpump@2.5.0"
     components:
       - "mitsubishi_heatpump"
 
@@ -8,6 +8,12 @@ climate:
     id: "heat_pump"
     name: "${display_name}"
     hardware_uart: "${uart_id}"
+    remote_temperature_operating_timeout_minutes: 30
+    remote_temperature_idle_timeout_minutes: 90
+    horizontal_vane_select:
+      name: "Horizontal Vane"
+    vertical_vane_select:
+      name: "Vertical Vane"
     supports:
       mode: ["HEAT_COOL", "COOL", "HEAT", "DRY", "FAN_ONLY"]
       fan_mode: ["AUTO", "DIFFUSE", "LOW", "MEDIUM", "MIDDLE", "HIGH"]

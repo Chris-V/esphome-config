@@ -2,16 +2,17 @@ i2c:
   - sda: "D2"
     scl: "D1"
 
-dallas:
-  - pin: "D5"
+one_wire:
+  - platform: "gpio"
+    pin: "D5"
 
 sensor:
   - platform: "am2320"
     humidity:
-      name: "${display_name} humidity"
+      name: "Hhumidity"
     temperature:
-      name: "${display_name} temperature"
-  - platform: "dallas"
-    name: "${display_name} basking temperature"
+      name: "Temperature"
+  - platform: "dallas_temp"
+    name: "Basking temperature"
     address: "${basking_temperature_address}"
     resolution: 12

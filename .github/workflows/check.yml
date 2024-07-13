@@ -8,7 +8,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
       - name: "Lint"
         run: "make lint"
 
@@ -16,25 +16,18 @@ jobs:
     name: "Prepare environment"
     runs-on: "ubuntu-latest"
     outputs:
-      devices: "${{ steps.list-devices.outputs.devices }}"
+      devices: "${{ steps.data.outputs.devices }}"
+      python_version: "${{ steps.data.outputs.python_version }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
-
-      - uses: "actions/setup-python@v4"
-        id: "setup-python"
-        with:
-          python-version: "3.11.1"
-          cache: "pip"
-
-      - name: "Install python dependencies"
-        run: "pip install -r requirements.txt"
-
+        uses: "actions/checkout@v4"
       - name: "List devices"
-        id: "list-devices"
+        id: "data"
         run: |
           devices_json=$(ls ./config/devices/ | jq -R -s -c 'split("\n")[:-1]')
+          python_version="$(grep -v '#' .tool-versions | grep python | awk '{print $2}')"
           echo "devices=$devices_json" >> $GITHUB_OUTPUT
+          echo "python_version=$python_version" >> $GITHUB_OUTPUT
 
   compile:
     name: "Compile ${{ matrix.device }}"
@@ -46,12 +39,11 @@ jobs:
         device: "${{ fromJSON(needs.prepare.outputs.devices) }}"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v3"
+        uses: "actions/checkout@v4"
 
-      - uses: "actions/setup-python@v4"
-        id: "setup-python"
+      - uses: "actions/setup-python@v5"
         with:
-          python-version: "3.11.1"
+          python-version: "${{ needs.prepare.outputs.python_version }}"
           cache: "pip"
 
       - name: "Install python dependencies"
